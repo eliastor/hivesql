@@ -1,0 +1,9 @@
+git.apache.org/thrift.git v0.0.0-20181019115558-cd829a0b9a5c h1:jKIdFEipsktUOrK575yO6MkBAerKF//fsZOCsum+gHQ=
+git.apache.org/thrift.git v0.0.0-20181019115558-cd829a0b9a5c/go.mod h1:fPE2ZNJGynbRyZ4dJvy6G277gSllfV2HJqblrnkyeyg=
+git.apache.org/thrift.git v0.12.0 h1:CMxsZlAmxKs+VAZMlDDL0wXciMblJcutQbEe3A9CYUM=
+git.apache.org/thrift.git v0.12.0/go.mod h1:fPE2ZNJGynbRyZ4dJvy6G277gSllfV2HJqblrnkyeyg=
+github.com/beltran/gohive v0.0.0-20190708233207-81b899b60449 h1:A8lOoR9zBKkCyDkpb/fjNyT9zy/JkDbbZFBW56Ty/b8=
+github.com/beltran/gohive v0.0.0-20190708233207-81b899b60449/go.mod h1:xb1hLEchLUMPw/C6N2bugcOI5feMgPwtCEDbHaLc7rQ=
+github.com/beltran/gosasl v0.0.0-20181023043315-01c4c2ce6a51 h1:4GvVCQFfMBsrCaTYR7E506OkKBZ/1AI+rc+oIgl2rm4=
+github.com/beltran/gosasl v0.0.0-20181023043315-01c4c2ce6a51/go.mod h1:4bpdWW6Q7hC2xAn+KT/ueCo1FoklhOMmEeHLhZso7po=
+github.com/beltran/gssapi v0.0.0-20180807003338-598f9f3b2878/go.mod h1:GLe4UoSyvJ3cVG+DVtKen5eAiaD8mAJFuV5PT3Eeg9Q=

@@ -38,15 +38,30 @@ func Test_parseDSN(t *testing.T) {
 			false,
 		},
 		{
-			"invalid opts",
+			"db name",
 			args{"user:pass@/blah"},
 			&config{
 				user:     "user",
 				password: "pass",
 				addr:     "localhost:10000",
-				dbName:   "default",
+				dbName:   "blah",
 			},
-			true,
+			false,
+		},
+		{
+			"hive opts",
+			args{"user:pass@/?hive.opt1=123&hive.opt2=true"},
+			&config{
+				user:     "user",
+				password: "pass",
+				addr:     "localhost:10000",
+				dbName:   "default",
+				hiveConfig: map[string]string{
+					"hive.opt1": "123",
+					"hive.opt2": "true",
+				},
+			},
+			false,
 		},
 	}
 	for _, tt := range tests {
