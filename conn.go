@@ -14,7 +14,7 @@ type conn struct {
 
 func (c *conn) Prepare(query string) (driver.Stmt, error) {
 	q := strings.TrimRight(query, ";")
-	st := newStmt(q)
+	st := newStmt(q, c)
 	return driver.Stmt(st), nil
 }
 

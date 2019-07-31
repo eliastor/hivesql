@@ -18,7 +18,7 @@ type stmt struct {
 	argc int
 }
 
-func newStmt(q string) *stmt {
+func newStmt(q string, c *conn) *stmt {
 	st := new(stmt)
 	r := strings.NewReader(q)
 	strbuf := new(strings.Builder)
@@ -43,6 +43,8 @@ func newStmt(q string) *stmt {
 			break
 		}
 	}
+
+	st.c = c
 
 	return st
 }
@@ -133,8 +135,7 @@ func (s *stmt) Query(args []driver.Value) (driver.Rows, error) {
 	c.Exec(context.TODO(), q)
 
 	if err = c.Error(); err != nil {
-		r := new(rows)
-		r.cursor = c
+		r := newRow(context.TODO(), c)
 		return r, nil
 	}
 

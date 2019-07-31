@@ -15,9 +15,10 @@ type rows struct {
 	ctx     context.Context
 }
 
-func newRow() *rows {
+func newRow(ctx context.Context, cursor *gohive.Cursor) *rows {
 	r := new(rows)
-	r.ctx = context.TODO()
+	r.ctx = ctx
+	r.cursor = cursor
 	return r
 }
 
@@ -28,6 +29,8 @@ func newRow() *rows {
 func (r *rows) Columns() []string {
 	if r.schema == nil {
 		r.schema = make(map[string]string)
+
+		r.cursor.Poll(false)
 
 		for _, col := range r.cursor.Description() {
 			//[]string{column.ColumnName, typeDesc.PrimitiveEntry.Type.String()}

@@ -37,6 +37,9 @@ func (c *config) normalize() {
 	if c.dbName == "" {
 		c.dbName = "default"
 	}
+	if c.auth == "" {
+		c.auth = "NONE"
+	}
 }
 
 func ensureHavePort(addr string) string {

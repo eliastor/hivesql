@@ -93,9 +93,9 @@ func parseDSNParams(cfg *config, params string) (err error) {
 		case "ldap":
 			boolValue, isBool := readBool(value)
 			if isBool && boolValue {
-				cfg.auth = "ldap"
+				cfg.auth = "LDAP"
 			} else {
-				cfg.auth = "none"
+				cfg.auth = "NONE"
 			}
 
 		// TLS-Encryption
