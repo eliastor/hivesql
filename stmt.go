@@ -18,11 +18,13 @@ type stmt struct {
 	argc int
 }
 
+//TODO: error handling
 func newStmt(q string, c *conn) *stmt {
+	q = strings.TrimRight(q, ";")
 	st := new(stmt)
 	r := strings.NewReader(q)
 	strbuf := new(strings.Builder)
-	var escape bool
+	var escape, arg bool
 	for {
 		ch, size, err := r.ReadRune()
 		if size == 1 && !escape {
@@ -31,15 +33,27 @@ func newStmt(q string, c *conn) *stmt {
 				escape = true
 				continue
 			case '?':
+				arg = true
 				st.q = append(st.q, strbuf.String())
 				strbuf = new(strings.Builder)
 				st.q = append(st.q, placeholder)
+
 			default:
 			}
 		}
-		escape = false
-		strbuf.WriteRune(ch)
+		if size > 0 && !arg {
+			escape = false
+			strbuf.WriteRune(ch)
+		}
+
+		arg = false
+
 		if err == io.EOF {
+			if strbuf.Len() > 0 {
+				st.q = append(st.q, strbuf.String())
+			}
+			break
+		} else if err != nil {
 			break
 		}
 	}
@@ -130,11 +144,10 @@ func (s *stmt) Query(args []driver.Value) (driver.Rows, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	c := s.c.c.Cursor()
 	c.Exec(context.TODO(), q)
 
-	if err = c.Error(); err != nil {
+	if err = c.Error(); err == nil {
 		r := newRow(context.TODO(), c)
 		return r, nil
 	}

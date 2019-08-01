@@ -11,20 +11,21 @@ import (
 )
 
 func Test_Workflow(t *testing.T) {
-	Example_Underline_workflow()
-	Example_Workflow()
+	//Example_underlineWorkflow()
+	Example_workflow()
 
 }
 
-func Example_Underline_workflow() {
+func Example_underlineWorkflow() {
 
 	cfg := gohive.NewConnectConfiguration()
 	conn, err := gohive.Connect("localhost", 10000, "NONE", cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
-	cursor := conn.Cursor()
 	defer conn.Close()
+	cursor := conn.Cursor()
+	defer cursor.Close()
 	ctx := context.TODO()
 	cursor.Exec(ctx, "SHOW DATABASES")
 	if cursor.Err != nil {
@@ -42,12 +43,12 @@ func Example_Underline_workflow() {
 	}
 }
 
-func Example_Workflow() {
+func Example_workflow() {
 	db, err := sql.Open("hivesql", "localhost:10000/default")
 	if err != nil {
 		log.Fatal(err)
 	}
-	rows, err := db.Query("SHOW DATABASES;")
+	rows, err := db.Query("DESCRIBE DATABASE EXTENDED default")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -57,17 +58,27 @@ func Example_Workflow() {
 	}
 	log.Println(cols)
 
+	resp := make([]*sql.NullString, len(cols))
+	for k := range resp {
+		resp[k] = new(sql.NullString)
+	}
+	respi := make([]interface{}, len(cols))
+	for k := range respi {
+		respi[k] = (interface{})(resp[k])
+	}
 	for rows.Next() {
-		var name string
-		if err := rows.Scan(&name); err != nil {
+		if err := rows.Scan(respi...); err != nil {
 			rows.Close()
 			log.Fatal(err)
 		}
-		log.Println(name)
+		for k := range resp {
+			log.Print(*resp[k], ", ")
+		}
+		log.Println()
 	}
 	rows.Close()
 
-	rows, err = db.Query("SHOW TABLE IN default")
+	rows, err = db.Query("SHOW TABLES IN default")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -83,8 +94,40 @@ func Example_Workflow() {
 			rows.Close()
 			log.Fatal(err)
 		}
-		log.Println(name)
+		log.Println("    ", name)
 	}
 	rows.Close()
 
+	rows, err = db.Query("SHOW TABLE EXTENDED IN ? LIKE ?", "default", "pokes")
+	if err != nil {
+		log.Fatal(err)
+	}
+	cols, err = rows.Columns()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(cols)
+
+	resp = make([]*sql.NullString, len(cols))
+	for k := range resp {
+		resp[k] = new(sql.NullString)
+	}
+	respi = make([]interface{}, len(cols))
+	for k := range respi {
+		respi[k] = (interface{})(resp[k])
+	}
+
+	for rows.Next() {
+		if err := rows.Scan(respi...); err != nil {
+			rows.Close()
+			log.Fatal(err)
+		}
+		for k := range resp {
+			log.Print(*resp[k], ", ")
+		}
+		log.Println()
+	}
+	rows.Close()
+
+	//pokes
 }

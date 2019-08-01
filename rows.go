@@ -30,7 +30,7 @@ func (r *rows) Columns() []string {
 	if r.schema == nil {
 		r.schema = make(map[string]string)
 
-		r.cursor.Poll(false)
+		//r.cursor.Poll(false)
 
 		for _, col := range r.cursor.Description() {
 			//[]string{column.ColumnName, typeDesc.PrimitiveEntry.Type.String()}

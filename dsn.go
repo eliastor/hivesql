@@ -101,7 +101,6 @@ func parseDSNParams(cfg *config, params string) (err error) {
 		// TLS-Encryption
 		case "tls":
 			cfg.turnTLS()
-			//TODO skip-verify
 			boolValue, isBool := readBool(value)
 			if isBool && boolValue {
 
